@@ -1,15 +1,15 @@
-package com.github.lmg.brave.dubbox;
+package com.github.lmg.brave.dubbox.server.adapter;
 
 import com.alibaba.dubbo.rpc.Invocation;
 import com.alibaba.dubbo.rpc.Invoker;
 import com.alibaba.dubbo.rpc.RpcContext;
 import com.github.kristofa.brave.*;
-import com.github.lmg.brave.dubbox.server.adapter.DubboClientNameProvider;
+import com.github.lmg.brave.dubbox.DubboClientNameProvider;
+import com.github.lmg.brave.dubbox.DubboSpanNameProvider;
+import com.github.lmg.brave.dubbox.enums.BraveAttachmentEnum;
 import com.github.lmg.brave.dubbox.support.DefaultClientNameProvider;
 import com.github.lmg.brave.dubbox.support.DefaultSpanNameProvider;
-import com.github.lmg.brave.dubbox.utils.IPConvertUtil;
 
-import java.net.InetSocketAddress;
 import java.util.Collection;
 import java.util.Collections;
 
@@ -23,8 +23,9 @@ public class DubboServerRequestAdapter implements ServerRequestAdapter {
     private Invoker<?> invoker;
     private Invocation invocation;
     private ServerTracer serverTracer;
-    private final static DubboSpanNameProvider spanNameProvider = new DefaultSpanNameProvider();
-    private final static DubboClientNameProvider clientNameProvider = new DefaultClientNameProvider();
+
+    private static final DubboSpanNameProvider spanNameProvider = new DefaultSpanNameProvider();
+    private static final DubboClientNameProvider clientNameProvider = new DefaultClientNameProvider();
 
 
     public DubboServerRequestAdapter(Invoker<?> invoker, Invocation invocation, ServerTracer serverTracer) {
@@ -35,13 +36,14 @@ public class DubboServerRequestAdapter implements ServerRequestAdapter {
 
     @Override
     public TraceData getTraceData() {
-        String sampled = invocation.getAttachment("sampled");
-        if (sampled != null && sampled.equals("0")) {
-            return TraceData.builder().sample(false).build();
-        } else {
-            final String parentId = invocation.getAttachment("parentId");
-            final String spanId = invocation.getAttachment("spanId");
-            final String traceId = invocation.getAttachment("traceId");
+        final String sampled = invocation.getAttachment(BraveAttachmentEnum.Sampled.getName());
+        if (sampled != null) {
+            if (sampled.equals("0")) {
+                return TraceData.builder().sample(false).build();
+            }
+            final String parentId = invocation.getAttachment(BraveAttachmentEnum.ParentId.getName());
+            final String spanId = invocation.getAttachment(BraveAttachmentEnum.SpanId.getName());
+            final String traceId = invocation.getAttachment(BraveAttachmentEnum.TraceId.getName());
             if (traceId != null && spanId != null) {
                 SpanId span = getSpanId(traceId, spanId, parentId);
                 return TraceData.builder().sample(true).spanId(span).build();
@@ -53,26 +55,13 @@ public class DubboServerRequestAdapter implements ServerRequestAdapter {
 
     @Override
     public String getSpanName() {
-        return spanNameProvider.resolveSpanName(RpcContext.getContext());
+        return spanNameProvider.resolveSpanName(this.invoker, this.invocation);
     }
 
     @Override
     public Collection<KeyValueAnnotation> requestAnnotations() {
-
-        String ipAddr = RpcContext.getContext().getUrl().getIp();
-        InetSocketAddress inetSocketAddress = RpcContext.getContext().getRemoteAddress();
-        final String clientName = clientNameProvider.resolveClientName(RpcContext.getContext());
-
-        serverTracer.setServerReceived(IPConvertUtil.convertToInt(ipAddr), inetSocketAddress.getPort(), clientName);
-
-        InetSocketAddress socketAddress = RpcContext.getContext().getLocalAddress();
-        if (socketAddress != null) {
-            KeyValueAnnotation remoteAddrAnnotation = KeyValueAnnotation.create("address", socketAddress.toString());
-            return Collections.singleton(remoteAddrAnnotation);
-        } else {
-            return Collections.emptyList();
-        }
-
+        KeyValueAnnotation remoteAddrAnnotation = KeyValueAnnotation.create("Client Address", RpcContext.getContext().getRemoteAddressString());
+        return Collections.singleton(remoteAddrAnnotation);
     }
 
     static SpanId getSpanId(String traceId, String spanId, String parentSpanId) {

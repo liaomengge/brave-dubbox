@@ -1,18 +1,22 @@
 package com.github.lmg.brave.dubbox.client.adapter;
 
+import com.alibaba.dubbo.common.URL;
 import com.alibaba.dubbo.rpc.Invocation;
 import com.alibaba.dubbo.rpc.Invoker;
-import com.alibaba.dubbo.rpc.RpcContext;
-import com.github.kristofa.brave.*;
+import com.alibaba.dubbo.rpc.RpcInvocation;
+import com.github.kristofa.brave.ClientRequestAdapter;
+import com.github.kristofa.brave.IdConversion;
+import com.github.kristofa.brave.KeyValueAnnotation;
+import com.github.kristofa.brave.SpanId;
+import com.github.kristofa.brave.internal.Nullable;
 import com.github.lmg.brave.dubbox.DubboServerNameProvider;
 import com.github.lmg.brave.dubbox.DubboSpanNameProvider;
+import com.github.lmg.brave.dubbox.enums.BraveAttachmentEnum;
 import com.github.lmg.brave.dubbox.support.DefaultServerNameProvider;
 import com.github.lmg.brave.dubbox.support.DefaultSpanNameProvider;
-import com.github.kristofa.brave.internal.Nullable;
 import com.github.lmg.brave.dubbox.utils.IPConvertUtil;
 import com.twitter.zipkin.gen.Endpoint;
 
-import java.net.InetSocketAddress;
 import java.util.Collection;
 import java.util.Collections;
 
@@ -20,10 +24,12 @@ import java.util.Collections;
  * Created by liaomengge on 17/4/13.
  */
 public class DubboClientRequestAdapter implements ClientRequestAdapter {
+
     private Invoker<?> invoker;
     private Invocation invocation;
-    private final static DubboSpanNameProvider spanNameProvider = new DefaultSpanNameProvider();
-    private final static DubboServerNameProvider serverNameProvider = new DefaultServerNameProvider();
+
+    private static final DubboSpanNameProvider spanNameProvider = new DefaultSpanNameProvider();
+    private static final DubboServerNameProvider serverNameProvider = new DefaultServerNameProvider();
 
 
     public DubboClientRequestAdapter(Invoker<?> invoker, Invocation invocation) {
@@ -33,35 +39,40 @@ public class DubboClientRequestAdapter implements ClientRequestAdapter {
 
     @Override
     public String getSpanName() {
-        return spanNameProvider.resolveSpanName(RpcContext.getContext());
+        return spanNameProvider.resolveSpanName(this.invoker, this.invocation);
     }
 
     @Override
     public void addSpanIdToRequest(@Nullable SpanId spanId) {
-        String application = RpcContext.getContext().getUrl().getParameter("application");
-        RpcContext.getContext().setAttachment("clientName", application);
+        String application = this.invoker.getUrl().getParameter("application");
+        RpcInvocation rpcInvocation = (RpcInvocation) this.invocation;
+        rpcInvocation.setAttachment("clientName", application);
         if (spanId == null) {
-            RpcContext.getContext().setAttachment("sampled", "0");
-        } else {
-            RpcContext.getContext().setAttachment("traceId", IdConversion.convertToString(spanId.traceId));
-            RpcContext.getContext().setAttachment("spanId", IdConversion.convertToString(spanId.spanId));
-            if (spanId.nullableParentId() != null) {
-                RpcContext.getContext().setAttachment("parentId", IdConversion.convertToString(spanId.parentId));
-            }
+            rpcInvocation.setAttachment(BraveAttachmentEnum.Sampled.getName(), "0");
+            return;
+        }
+        rpcInvocation.setAttachment(BraveAttachmentEnum.Sampled.getName(), "1");
+        rpcInvocation.setAttachment(BraveAttachmentEnum.TraceId.getName(), IdConversion.convertToString(spanId.traceId));
+        rpcInvocation.setAttachment(BraveAttachmentEnum.SpanId.getName(), IdConversion.convertToString(spanId.spanId));
+        if (spanId.nullableParentId() != null) {
+            rpcInvocation.setAttachment(BraveAttachmentEnum.ParentId.getName(), IdConversion.convertToString(spanId.parentId));
         }
     }
 
     @Override
     public Collection<KeyValueAnnotation> requestAnnotations() {
-        return Collections.singletonList(KeyValueAnnotation.create("url", RpcContext.getContext().getUrl().toString()));
+        String protocol = this.invoker.getUrl().getProtocol();
+        String key = protocol + ".url";
+        return Collections.singletonList(KeyValueAnnotation.create(key, this.invoker.getUrl().toString()));
     }
 
     @Override
     public Endpoint serverAddress() {
-        InetSocketAddress inetSocketAddress = RpcContext.getContext().getRemoteAddress();
-        String ipAddr = RpcContext.getContext().getUrl().getIp();
-        String serverName = serverNameProvider.resolveServerName(RpcContext.getContext());
-        return Endpoint.create(serverName, IPConvertUtil.convertToInt(ipAddr), inetSocketAddress.getPort());
+        URL url = this.invoker.getUrl();
+        String ip = url.getIp();
+        int port = url.getPort();
+        String serverName = serverNameProvider.resolveServerName(this.invoker);
+        return Endpoint.create(serverName, IPConvertUtil.convertToInt(ip), port);
     }
 
 

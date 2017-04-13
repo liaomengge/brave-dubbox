@@ -4,7 +4,7 @@
 ```xml
         <dependency>
             <groupId>io.zipkin.brave</groupId>
-            <artifactId>brave-dubbo</artifactId>
+            <artifactId>brave-dubbox</artifactId>
             <version>1.0.0-SNAPSHOT</version>
         </dependency>
 ```
@@ -13,11 +13,19 @@
     
    * 打印日志方式
 ```xml
-        <bean id="brave" class="com.github.kristofa.brave.dubbo.BraveFactoryBean" p:serviceName="serviceName" p:zipkinHost="" p:rate="1.0" />
+        <bean id="brave" class="com.github.lmg.brave.dubbox.factory.BraveFactoryBean">
+            <property name="serviceName" value="liaomengge"/>
+            <property name="zipkinHost" value=""/>
+            <property name="rate" value="1.0"/>
+        </bean>
 ```
    * http方式
 ```xml
-        <bean id="brave" class="com.github.kristofa.brave.dubbo.BraveFactoryBean" p:serviceName="serviceName" p:zipkinHost="http://10.168.16.111:9411/" p:rate="1.0" />
+        <bean id="brave" class="com.github.lmg.brave.dubbox.factory.BraveFactoryBean">
+            <property name="serviceName" value="liaomengge"/>
+            <property name="zipkinHost" value="http://localhost:9411"/>
+            <property name="rate" value="1.0"/>
+        </bean>
 ```
 
 

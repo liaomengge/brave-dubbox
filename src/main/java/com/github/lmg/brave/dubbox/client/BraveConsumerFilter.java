@@ -4,9 +4,10 @@ import com.alibaba.dubbo.common.Constants;
 import com.alibaba.dubbo.common.extension.Activate;
 import com.alibaba.dubbo.rpc.*;
 import com.github.kristofa.brave.Brave;
+import com.github.kristofa.brave.ClientRequestInterceptor;
+import com.github.kristofa.brave.ClientResponseInterceptor;
 import com.github.lmg.brave.dubbox.client.adapter.DubboClientRequestAdapter;
 import com.github.lmg.brave.dubbox.client.adapter.DubboClientResponseAdapter;
-import lombok.Setter;
 
 /**
  * Created by liaomengge on 17/4/13.
@@ -14,19 +15,27 @@ import lombok.Setter;
 @Activate(group = Constants.CONSUMER)
 public class BraveConsumerFilter implements Filter {
 
-    @Setter
+    private ClientRequestInterceptor clientRequestInterceptor;
+    private ClientResponseInterceptor clientResponseInterceptor;
+
     private Brave brave;
+
+    public void setBrave(Brave brave) {
+        this.brave = brave;
+        this.clientRequestInterceptor = this.brave.clientRequestInterceptor();
+        this.clientResponseInterceptor = this.brave.clientResponseInterceptor();
+    }
 
     @Override
     public Result invoke(Invoker<?> invoker, Invocation invocation) throws RpcException {
-        brave.clientRequestInterceptor().handle(new DubboClientRequestAdapter(invoker, invocation));
+        clientRequestInterceptor.handle(new DubboClientRequestAdapter(invoker, invocation));
         try {
             Result rpcResult = invoker.invoke(invocation);
             brave.clientResponseInterceptor().handle(new DubboClientResponseAdapter(rpcResult));
             return rpcResult;
-        } catch (Exception ex) {
-            brave.clientResponseInterceptor().handle(new DubboClientResponseAdapter(ex));
-            throw ex;
+        } catch (Exception e) {
+            clientResponseInterceptor.handle(new DubboClientResponseAdapter(e));
+            throw e;
         } finally {
             brave.clientSpanThreadBinder().setCurrentSpan(null);
         }

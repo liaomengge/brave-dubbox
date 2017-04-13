@@ -1,7 +1,7 @@
 package com.github.lmg.brave.dubbox.support;
 
-import com.alibaba.dubbo.rpc.RpcContext;
-import com.github.lmg.brave.dubbox.server.adapter.DubboClientNameProvider;
+import com.alibaba.dubbo.rpc.Invocation;
+import com.github.lmg.brave.dubbox.DubboClientNameProvider;
 
 /**
  * Created by liaomengge on 17/4/13.
@@ -9,8 +9,7 @@ import com.github.lmg.brave.dubbox.server.adapter.DubboClientNameProvider;
 public class DefaultClientNameProvider implements DubboClientNameProvider {
 
     @Override
-    public String resolveClientName(RpcContext rpcContext) {
-        String application = RpcContext.getContext().getUrl().getParameter("clientName");
-        return application;
+    public String resolveClientName(Invocation invocation) {
+        return invocation.getAttachment("clientName");
     }
 }

@@ -5,17 +5,20 @@ package com.github.lmg.brave.dubbox.utils;
  */
 public class IPConvertUtil {
 
-    public static int convertToInt(String ipAddr) {
-        String[] p4 = ipAddr.split("\\.");
+    public static int convertToInt(String ip) {
+        String[] ips = ip.split("\\.");
         int ipInt = 0;
-        int part = Integer.valueOf(p4[0]);
-        ipInt = ipInt | (part << 24);
-        part = Integer.valueOf(p4[1]);
-        ipInt = ipInt | (part << 16);
-        part = Integer.valueOf(p4[2]);
-        ipInt = ipInt | (part << 8);
-        part = Integer.valueOf(p4[3]);
-        ipInt = ipInt | (part);
+        int value;
+        int w = 24;
+        for (String s : ips) {
+            try {
+                value = Integer.valueOf(s);
+            } catch (NumberFormatException e) {
+                value = 0;
+            }
+            ipInt |= value << w;
+            w -= 8;
+        }
         return ipInt;
     }
 }
