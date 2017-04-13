@@ -1,13 +1,15 @@
-package com.github.kristofa.brave.dubbo;
+package com.github.lmg.brave.dubbox.client;
 
 import com.alibaba.dubbo.common.Constants;
 import com.alibaba.dubbo.common.extension.Activate;
 import com.alibaba.dubbo.rpc.*;
 import com.github.kristofa.brave.Brave;
+import com.github.lmg.brave.dubbox.client.adapter.DubboClientRequestAdapter;
+import com.github.lmg.brave.dubbox.client.adapter.DubboClientResponseAdapter;
 import lombok.Setter;
 
 /**
- * Created by chenjg on 16/7/24.
+ * Created by liaomengge on 17/4/13.
  */
 @Activate(group = Constants.CONSUMER)
 public class BraveConsumerFilter implements Filter {

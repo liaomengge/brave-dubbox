@@ -1,35 +1,33 @@
-package com.github.kristofa.brave.dubbo;
+package com.github.lmg.brave.dubbox;
 
 import com.alibaba.dubbo.rpc.Invocation;
 import com.alibaba.dubbo.rpc.Invoker;
 import com.alibaba.dubbo.rpc.RpcContext;
 import com.github.kristofa.brave.*;
-import com.github.kristofa.brave.dubbo.support.DefaultClientNameProvider;
-import com.github.kristofa.brave.dubbo.support.DefaultServerNameProvider;
-import com.github.kristofa.brave.dubbo.support.DefaultSpanNameProvider;
+import com.github.lmg.brave.dubbox.server.adapter.DubboClientNameProvider;
+import com.github.lmg.brave.dubbox.support.DefaultClientNameProvider;
+import com.github.lmg.brave.dubbox.support.DefaultSpanNameProvider;
+import com.github.lmg.brave.dubbox.utils.IPConvertUtil;
 
-import static com.github.kristofa.brave.IdConversion.convertToLong;
-
-
-import java.lang.reflect.Method;
 import java.net.InetSocketAddress;
 import java.util.Collection;
 import java.util.Collections;
 
+import static com.github.kristofa.brave.IdConversion.convertToLong;
+
 /**
- * Created by chenjg on 16/7/24.
+ * Created by liaomengge on 17/4/13.
  */
-public class DubboServerRequestAdapter  implements ServerRequestAdapter {
+public class DubboServerRequestAdapter implements ServerRequestAdapter {
 
     private Invoker<?> invoker;
     private Invocation invocation;
     private ServerTracer serverTracer;
-    private final static  DubboSpanNameProvider spanNameProvider = new DefaultSpanNameProvider();
-    private final static  DubboClientNameProvider clientNameProvider = new DefaultClientNameProvider();
+    private final static DubboSpanNameProvider spanNameProvider = new DefaultSpanNameProvider();
+    private final static DubboClientNameProvider clientNameProvider = new DefaultClientNameProvider();
 
 
-
-    public DubboServerRequestAdapter(Invoker<?> invoker, Invocation invocation,ServerTracer serverTracer) {
+    public DubboServerRequestAdapter(Invoker<?> invoker, Invocation invocation, ServerTracer serverTracer) {
         this.invoker = invoker;
         this.invocation = invocation;
         this.serverTracer = serverTracer;
@@ -37,19 +35,19 @@ public class DubboServerRequestAdapter  implements ServerRequestAdapter {
 
     @Override
     public TraceData getTraceData() {
-      String sampled =   invocation.getAttachment("sampled");
-      if(sampled != null && sampled.equals("0")){
-          return TraceData.builder().sample(false).build();
-      }else {
-          final String parentId = invocation.getAttachment("parentId");
-          final String spanId = invocation.getAttachment("spanId");
-          final String traceId = invocation.getAttachment("traceId");
-          if (traceId != null && spanId != null) {
-              SpanId span = getSpanId(traceId, spanId, parentId);
-              return TraceData.builder().sample(true).spanId(span).build();
-          }
-      }
-       return TraceData.builder().build();
+        String sampled = invocation.getAttachment("sampled");
+        if (sampled != null && sampled.equals("0")) {
+            return TraceData.builder().sample(false).build();
+        } else {
+            final String parentId = invocation.getAttachment("parentId");
+            final String spanId = invocation.getAttachment("spanId");
+            final String traceId = invocation.getAttachment("traceId");
+            if (traceId != null && spanId != null) {
+                SpanId span = getSpanId(traceId, spanId, parentId);
+                return TraceData.builder().sample(true).spanId(span).build();
+            }
+        }
+        return TraceData.builder().build();
 
     }
 
@@ -65,7 +63,7 @@ public class DubboServerRequestAdapter  implements ServerRequestAdapter {
         InetSocketAddress inetSocketAddress = RpcContext.getContext().getRemoteAddress();
         final String clientName = clientNameProvider.resolveClientName(RpcContext.getContext());
 
-        serverTracer.setServerReceived(IPConversion.convertToInt(ipAddr),inetSocketAddress.getPort(),clientName);
+        serverTracer.setServerReceived(IPConvertUtil.convertToInt(ipAddr), inetSocketAddress.getPort(), clientName);
 
         InetSocketAddress socketAddress = RpcContext.getContext().getLocalAddress();
         if (socketAddress != null) {

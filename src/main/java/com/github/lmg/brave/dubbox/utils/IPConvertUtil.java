@@ -1,11 +1,11 @@
-package com.github.kristofa.brave;
+package com.github.lmg.brave.dubbox.utils;
 
 /**
- * Created by chenjg on 16/8/4.
+ * Created by liaomengge on 17/4/13.
  */
-public class IPConversion {
+public class IPConvertUtil {
 
-    public  static  int convertToInt(String ipAddr){
+    public static int convertToInt(String ipAddr) {
         String[] p4 = ipAddr.split("\\.");
         int ipInt = 0;
         int part = Integer.valueOf(p4[0]);

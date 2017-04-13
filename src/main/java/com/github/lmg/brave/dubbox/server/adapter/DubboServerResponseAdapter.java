@@ -1,4 +1,4 @@
-package com.github.kristofa.brave.dubbo;
+package com.github.lmg.brave.dubbox.server.adapter;
 
 import com.alibaba.dubbo.rpc.Result;
 import com.github.kristofa.brave.KeyValueAnnotation;
@@ -9,11 +9,11 @@ import java.util.Collection;
 import java.util.List;
 
 /**
- * Created by chenjg on 16/7/24.
+ * Created by liaomengge on 17/4/13.
  */
 public class DubboServerResponseAdapter implements ServerResponseAdapter {
 
-    private Result rpcResult ;
+    private Result rpcResult;
 
     public DubboServerResponseAdapter(Result rpcResult) {
         this.rpcResult = rpcResult;
@@ -22,11 +22,11 @@ public class DubboServerResponseAdapter implements ServerResponseAdapter {
     @Override
     public Collection<KeyValueAnnotation> responseAnnotations() {
         List<KeyValueAnnotation> annotations = new ArrayList<KeyValueAnnotation>();
-        if(!rpcResult.hasException()){
-            KeyValueAnnotation keyValueAnnotation=  KeyValueAnnotation.create("server_result","true");
+        if (!rpcResult.hasException()) {
+            KeyValueAnnotation keyValueAnnotation = KeyValueAnnotation.create("server_result", "true");
             annotations.add(keyValueAnnotation);
-        }else {
-            KeyValueAnnotation keyValueAnnotation=  KeyValueAnnotation.create("exception",rpcResult.getException().getMessage());
+        } else {
+            KeyValueAnnotation keyValueAnnotation = KeyValueAnnotation.create("exception", rpcResult.getException().getMessage());
             annotations.add(keyValueAnnotation);
         }
         return annotations;

@@ -1,9 +1,9 @@
-package com.github.kristofa.brave.dubbo;
+package com.github.lmg.brave.dubbox.server.adapter;
 
 import com.alibaba.dubbo.rpc.RpcContext;
 
 /**
- * Created by chenjg on 16/8/22.
+ * Created by liaomengge on 17/4/13.
  */
 public interface DubboClientNameProvider {
     public String resolveClientName(RpcContext rpcContext);
