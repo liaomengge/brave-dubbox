@@ -71,8 +71,8 @@ public class DubboClientRequestAdapter implements ClientRequestAdapter {
         URL url = this.invoker.getUrl();
         String ip = url.getIp();
         int port = url.getPort();
-        String serverName = serverNameProvider.resolveServerName(this.invoker);
-        return Endpoint.create(serverName, IPConvertUtil.convertToInt(ip), port);
+        //此处是拿不到服务端的serverName的
+        return Endpoint.create("", IPConvertUtil.convertToInt(ip), port);
     }
 
 
