@@ -68,17 +68,34 @@
         </dependency>
     </dependencies>
 
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-source-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>attach-sources</id>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+
     <distributionManagement>
         <snapshotRepository>
-            <id>third-jar-snapshots</id>
+            <id>9now-queue-snapshots</id>
             <name>Base Snapshot</name>
-            <url>http://localhost:8081/nexus/content/repositories/brave-snapshots/</url>
+            <url>http://localhost:8081/nexus/content/repositories/9now-queue-snapshots/</url>
             <uniqueVersion>true</uniqueVersion>
         </snapshotRepository>
         <repository>
-            <id>third-jar-release</id>
+            <id>9now-queue-snapshots</id>
             <name>Base Release</name>
-            <url>http://localhost:8081/nexus/content/repositories/brave-release/</url>
+            <url>http://localhost:8081/nexus/content/repositories/9now-queue-snapshots/</url>
         </repository>
     </distributionManagement>
 </project>

@@ -1,4 +1,4 @@
-package com.github.lmg.brave.dubbox;
+package com.github.lmg.brave.dubbox.support;
 
 import com.alibaba.dubbo.rpc.Invocation;
 

@@ -4,11 +4,11 @@ import com.alibaba.dubbo.rpc.Invocation;
 import com.alibaba.dubbo.rpc.Invoker;
 import com.alibaba.dubbo.rpc.RpcContext;
 import com.github.kristofa.brave.*;
-import com.github.lmg.brave.dubbox.DubboClientNameProvider;
-import com.github.lmg.brave.dubbox.DubboSpanNameProvider;
+import com.github.lmg.brave.dubbox.support.DubboClientNameProvider;
+import com.github.lmg.brave.dubbox.support.DubboSpanNameProvider;
 import com.github.lmg.brave.dubbox.enums.BraveAttachmentEnum;
-import com.github.lmg.brave.dubbox.support.DefaultClientNameProvider;
-import com.github.lmg.brave.dubbox.support.DefaultSpanNameProvider;
+import com.github.lmg.brave.dubbox.support.defaults.DefaultClientNameProvider;
+import com.github.lmg.brave.dubbox.support.defaults.DefaultSpanNameProvider;
 
 import java.util.Collection;
 import java.util.Collections;

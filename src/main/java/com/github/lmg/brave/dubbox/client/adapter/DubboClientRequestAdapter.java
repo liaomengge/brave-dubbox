@@ -9,11 +9,11 @@ import com.github.kristofa.brave.IdConversion;
 import com.github.kristofa.brave.KeyValueAnnotation;
 import com.github.kristofa.brave.SpanId;
 import com.github.kristofa.brave.internal.Nullable;
-import com.github.lmg.brave.dubbox.DubboServerNameProvider;
-import com.github.lmg.brave.dubbox.DubboSpanNameProvider;
+import com.github.lmg.brave.dubbox.support.DubboServerNameProvider;
+import com.github.lmg.brave.dubbox.support.DubboSpanNameProvider;
 import com.github.lmg.brave.dubbox.enums.BraveAttachmentEnum;
-import com.github.lmg.brave.dubbox.support.DefaultServerNameProvider;
-import com.github.lmg.brave.dubbox.support.DefaultSpanNameProvider;
+import com.github.lmg.brave.dubbox.support.defaults.DefaultServerNameProvider;
+import com.github.lmg.brave.dubbox.support.defaults.DefaultSpanNameProvider;
 import com.github.lmg.brave.dubbox.utils.IPConvertUtil;
 import com.twitter.zipkin.gen.Endpoint;
 

@@ -1,8 +1,8 @@
-package com.github.lmg.brave.dubbox.support;
+package com.github.lmg.brave.dubbox.support.defaults;
 
 import com.alibaba.dubbo.rpc.Invocation;
 import com.alibaba.dubbo.rpc.Invoker;
-import com.github.lmg.brave.dubbox.DubboSpanNameProvider;
+import com.github.lmg.brave.dubbox.support.DubboSpanNameProvider;
 
 /**
  * Created by liaomengge on 17/4/13.
