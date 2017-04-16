@@ -10,6 +10,11 @@ import com.github.lmg.brave.dubbox.support.DubboSpanNameProvider;
 public class DefaultSpanNameProvider implements DubboSpanNameProvider {
 
     @Override
+    public String resolveSpanName(Invocation invocation) {
+        return invocation.getMethodName();
+    }
+
+    @Override
     public String resolveSpanName(Invoker<?> invoker, Invocation invocation) {
         return invoker.getInterface().getSimpleName() + "." + invocation.getMethodName();
     }

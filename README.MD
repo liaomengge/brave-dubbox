@@ -5,7 +5,7 @@
         <dependency>
             <groupId>io.zipkin.brave</groupId>
             <artifactId>brave-dubbox</artifactId>
-            <version>1.0.0-SNAPSHOT</version>
+            <version>1.0.1-SNAPSHOT</version>
         </dependency>
 ```
 
@@ -19,7 +19,7 @@
             <property name="rate" value="1.0"/>
         </bean>
 ```
-   * http方式
+   * http方式（不建议在生产上使用）
 ```xml
         <bean id="brave" class="com.github.lmg.brave.dubbox.factory.BraveFactoryBean">
             <property name="serviceName" value="liaomengge"/>
@@ -28,7 +28,21 @@
         </bean>
 ```
 
+### 支持模式
+
+ 1、 dubbox客户端 -> dubbox服务端
+
+> 直接使用dubbox进行调用
+
+ 2、 非dubbox客户端（restTemplate） -> dubbox服务端
+
+> 在客户端，通过Spring RestTemplate走http调用服务
+
+ 3、 非dubbox客户端（httpClient） -> dubbox服务端
+
+> 开发ing
 
 
+ 
 ### 参考文档:
 [http://www.tuicool.com/articles/f2qAZnZ](http://www.tuicool.com/articles/f2qAZnZ)

@@ -6,8 +6,12 @@ import com.alibaba.dubbo.rpc.*;
 import com.github.kristofa.brave.Brave;
 import com.github.kristofa.brave.ServerRequestInterceptor;
 import com.github.kristofa.brave.ServerResponseInterceptor;
-import com.github.lmg.brave.dubbox.server.adapter.DubboServerRequestAdapter;
-import com.github.lmg.brave.dubbox.server.adapter.DubboServerResponseAdapter;
+import com.github.lmg.brave.dubbox.server.adapter.dubbo.DubboServerRequestAdapter;
+import com.github.lmg.brave.dubbox.server.adapter.dubbo.DubboServerResponseAdapter;
+import com.github.lmg.brave.dubbox.server.adapter.rest.RestServerRequestAdapter;
+import com.github.lmg.brave.dubbox.server.adapter.rest.RestServerResponseAdapter;
+
+import static com.github.lmg.brave.enums.ProtocolEnum.*;
 
 /**
  * Created by liaomengge on 17/4/13.
@@ -27,14 +31,29 @@ public class BraveProviderFilter implements Filter {
 
     @Override
     public Result invoke(Invoker<?> invoker, Invocation invocation) throws RpcException {
-        serverRequestInterceptor.handle(new DubboServerRequestAdapter(invoker, invocation));
-        try {
-            Result rpcResult = invoker.invoke(invocation);
-            serverResponseInterceptor.handle(new DubboServerResponseAdapter(rpcResult));
-            return rpcResult;
-        } catch (Exception e) {
-            serverResponseInterceptor.handle(new DubboServerResponseAdapter(e));
-            throw e;
+        String protocol = invoker.getUrl().getProtocol();
+        if (protocol.equals(REST.getName())) {
+            serverRequestInterceptor.handle(new RestServerRequestAdapter(invoker, invocation));
+            try {
+                Result rpcResult = invoker.invoke(invocation);
+                serverResponseInterceptor.handle(new RestServerResponseAdapter(rpcResult));
+                return rpcResult;
+            } catch (Exception e) {
+                serverResponseInterceptor.handle(new RestServerResponseAdapter(e));
+                throw e;
+            }
+        } else if (protocol.equals(DUBBO.getName()) || protocol.equals(THRIFT.getName()) || protocol.equals(THRIFT2.getName())) {
+            serverRequestInterceptor.handle(new DubboServerRequestAdapter(invoker, invocation));
+            try {
+                Result rpcResult = invoker.invoke(invocation);
+                serverResponseInterceptor.handle(new DubboServerResponseAdapter(rpcResult));
+                return rpcResult;
+            } catch (Exception e) {
+                serverResponseInterceptor.handle(new DubboServerResponseAdapter(e));
+                throw e;
+            }
+        } else {
+            return invoker.invoke(invocation);
         }
     }
 }

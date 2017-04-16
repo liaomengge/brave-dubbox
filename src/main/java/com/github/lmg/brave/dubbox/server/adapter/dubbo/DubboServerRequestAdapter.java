@@ -1,33 +1,28 @@
-package com.github.lmg.brave.dubbox.server.adapter;
+package com.github.lmg.brave.dubbox.server.adapter.dubbo;
 
 import com.alibaba.dubbo.rpc.Invocation;
 import com.alibaba.dubbo.rpc.Invoker;
 import com.alibaba.dubbo.rpc.RpcContext;
-import com.github.kristofa.brave.*;
+import com.github.kristofa.brave.KeyValueAnnotation;
+import com.github.kristofa.brave.SpanId;
+import com.github.kristofa.brave.TraceData;
 import com.github.kristofa.brave.http.BraveHttpHeaders;
-import com.github.lmg.brave.dubbox.support.DubboSpanNameProvider;
-import com.github.lmg.brave.dubbox.support.defaults.DefaultSpanNameProvider;
+import com.github.lmg.brave.dubbox.server.adapter.AbstractServerRequestAdapter;
+import lombok.AllArgsConstructor;
 
 import java.util.Collection;
 import java.util.Collections;
 
-import static com.github.kristofa.brave.IdConversion.convertToLong;
-
 /**
  * Created by liaomengge on 17/4/13.
  */
-public class DubboServerRequestAdapter implements ServerRequestAdapter {
+@AllArgsConstructor
+public class DubboServerRequestAdapter extends AbstractServerRequestAdapter {
+
+    private static final String CLIENT_ADDRESS = "Client Address";
 
     private Invoker<?> invoker;
     private Invocation invocation;
-
-    private static final DubboSpanNameProvider spanNameProvider = new DefaultSpanNameProvider();
-
-
-    public DubboServerRequestAdapter(Invoker<?> invoker, Invocation invocation) {
-        this.invoker = invoker;
-        this.invocation = invocation;
-    }
 
     @Override
     public TraceData getTraceData() {
@@ -55,17 +50,8 @@ public class DubboServerRequestAdapter implements ServerRequestAdapter {
 
     @Override
     public Collection<KeyValueAnnotation> requestAnnotations() {
-        KeyValueAnnotation remoteAddrAnnotation = KeyValueAnnotation.create("Client Address", RpcContext.getContext().getRemoteAddressString());
+        KeyValueAnnotation remoteAddrAnnotation = KeyValueAnnotation.create(CLIENT_ADDRESS, RpcContext.getContext().getRemoteAddressString());
         return Collections.singleton(remoteAddrAnnotation);
     }
-
-    static SpanId getSpanId(String traceId, String spanId, String parentSpanId) {
-        return SpanId.builder()
-                .traceId(convertToLong(traceId))
-                .spanId(convertToLong(spanId))
-                .parentId(parentSpanId == null ? null : convertToLong(parentSpanId))
-                .sampled(Boolean.TRUE).build();
-    }
-
 
 }

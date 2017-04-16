@@ -8,5 +8,8 @@ import com.alibaba.dubbo.rpc.Invoker;
  */
 public interface DubboSpanNameProvider {
 
+    String resolveSpanName(Invocation invocation);
+
     String resolveSpanName(Invoker<?> invoker, Invocation invocation);
+
 }
