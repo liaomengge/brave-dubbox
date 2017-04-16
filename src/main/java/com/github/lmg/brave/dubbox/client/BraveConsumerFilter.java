@@ -6,7 +6,6 @@ import com.alibaba.dubbo.rpc.*;
 import com.github.kristofa.brave.Brave;
 import com.github.kristofa.brave.ClientRequestInterceptor;
 import com.github.kristofa.brave.ClientResponseInterceptor;
-import com.github.kristofa.brave.LocalTracer;
 import com.github.lmg.brave.dubbox.client.adapter.DubboClientRequestAdapter;
 import com.github.lmg.brave.dubbox.client.adapter.DubboClientResponseAdapter;
 
@@ -18,7 +17,6 @@ public class BraveConsumerFilter implements Filter {
 
     private ClientRequestInterceptor clientRequestInterceptor;
     private ClientResponseInterceptor clientResponseInterceptor;
-    private LocalTracer localTracer;
 
     private Brave brave;
 
@@ -26,7 +24,6 @@ public class BraveConsumerFilter implements Filter {
         this.brave = brave;
         this.clientRequestInterceptor = this.brave.clientRequestInterceptor();
         this.clientResponseInterceptor = this.brave.clientResponseInterceptor();
-        this.localTracer = this.brave.localTracer();
     }
 
     @Override
@@ -39,8 +36,6 @@ public class BraveConsumerFilter implements Filter {
         } catch (Exception e) {
             clientResponseInterceptor.handle(new DubboClientResponseAdapter(e));
             throw e;
-        } finally {
-            localTracer.finishSpan();
         }
     }
 }

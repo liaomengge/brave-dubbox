@@ -1,9 +1,6 @@
 package com.github.lmg.brave.dubbox.factory;
 
-import com.github.kristofa.brave.Brave;
-import com.github.kristofa.brave.EmptySpanCollectorMetricsHandler;
-import com.github.kristofa.brave.LoggingSpanCollector;
-import com.github.kristofa.brave.Sampler;
+import com.github.kristofa.brave.*;
 import com.github.kristofa.brave.http.HttpSpanCollector;
 import lombok.Getter;
 import lombok.Setter;
@@ -78,7 +75,7 @@ public class BraveFactoryBean implements FactoryBean<Brave> {
             builder.spanCollector(HttpSpanCollector.create(this.zipkinHost, new EmptySpanCollectorMetricsHandler())).traceSampler(Sampler.create(rate)).build();
             logger.info("brave dubbox config collect with httpSpanCollector , rate is " + rate);
         } else {
-            builder.spanCollector(new LoggingSpanCollector()).traceSampler(Sampler.create(rate)).build();
+            builder.reporter(new LoggingReporter()).traceSampler(Sampler.create(rate)).build();
             logger.info("brave dubbox config collect with loggingSpanCollector , rate is " + rate);
         }
         this.instance = builder.build();

@@ -27,7 +27,7 @@ public class BraveProviderFilter implements Filter {
 
     @Override
     public Result invoke(Invoker<?> invoker, Invocation invocation) throws RpcException {
-        serverRequestInterceptor.handle(new DubboServerRequestAdapter(invoker, invocation, brave.serverTracer()));
+        serverRequestInterceptor.handle(new DubboServerRequestAdapter(invoker, invocation));
         try {
             Result rpcResult = invoker.invoke(invocation);
             serverResponseInterceptor.handle(new DubboServerResponseAdapter(rpcResult));

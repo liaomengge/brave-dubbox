@@ -8,11 +8,9 @@ import com.github.kristofa.brave.ClientRequestAdapter;
 import com.github.kristofa.brave.IdConversion;
 import com.github.kristofa.brave.KeyValueAnnotation;
 import com.github.kristofa.brave.SpanId;
+import com.github.kristofa.brave.http.BraveHttpHeaders;
 import com.github.kristofa.brave.internal.Nullable;
-import com.github.lmg.brave.dubbox.support.DubboServerNameProvider;
 import com.github.lmg.brave.dubbox.support.DubboSpanNameProvider;
-import com.github.lmg.brave.dubbox.enums.BraveAttachmentEnum;
-import com.github.lmg.brave.dubbox.support.defaults.DefaultServerNameProvider;
 import com.github.lmg.brave.dubbox.support.defaults.DefaultSpanNameProvider;
 import com.github.lmg.brave.dubbox.utils.IPConvertUtil;
 import com.twitter.zipkin.gen.Endpoint;
@@ -29,7 +27,6 @@ public class DubboClientRequestAdapter implements ClientRequestAdapter {
     private Invocation invocation;
 
     private static final DubboSpanNameProvider spanNameProvider = new DefaultSpanNameProvider();
-    private static final DubboServerNameProvider serverNameProvider = new DefaultServerNameProvider();
 
 
     public DubboClientRequestAdapter(Invoker<?> invoker, Invocation invocation) {
@@ -48,14 +45,14 @@ public class DubboClientRequestAdapter implements ClientRequestAdapter {
         RpcInvocation rpcInvocation = (RpcInvocation) this.invocation;
         rpcInvocation.setAttachment("clientName", application);
         if (spanId == null) {
-            rpcInvocation.setAttachment(BraveAttachmentEnum.Sampled.getName(), "0");
+            rpcInvocation.setAttachment(BraveHttpHeaders.Sampled.getName(), "0");
             return;
         }
-        rpcInvocation.setAttachment(BraveAttachmentEnum.Sampled.getName(), "1");
-        rpcInvocation.setAttachment(BraveAttachmentEnum.TraceId.getName(), IdConversion.convertToString(spanId.traceId));
-        rpcInvocation.setAttachment(BraveAttachmentEnum.SpanId.getName(), IdConversion.convertToString(spanId.spanId));
+        rpcInvocation.setAttachment(BraveHttpHeaders.Sampled.getName(), "1");
+        rpcInvocation.setAttachment(BraveHttpHeaders.TraceId.getName(), IdConversion.convertToString(spanId.traceId));
+        rpcInvocation.setAttachment(BraveHttpHeaders.SpanId.getName(), IdConversion.convertToString(spanId.spanId));
         if (spanId.nullableParentId() != null) {
-            rpcInvocation.setAttachment(BraveAttachmentEnum.ParentId.getName(), IdConversion.convertToString(spanId.parentId));
+            rpcInvocation.setAttachment(BraveHttpHeaders.ParentSpanId.getName(), IdConversion.convertToString(spanId.parentId));
         }
     }
 
@@ -72,7 +69,7 @@ public class DubboClientRequestAdapter implements ClientRequestAdapter {
         String ip = url.getIp();
         int port = url.getPort();
         //此处是拿不到服务端的serverName的
-        return Endpoint.create("", IPConvertUtil.convertToInt(ip), port);
+        return Endpoint.builder().serviceName("").ipv4(IPConvertUtil.convertToInt(ip)).port(port).build();
     }
 
 
