@@ -3,8 +3,8 @@ package com.github.lmg.brave.http.client.rest_template;
 import com.github.kristofa.brave.Brave;
 import com.github.kristofa.brave.ClientRequestInterceptor;
 import com.github.kristofa.brave.ClientResponseInterceptor;
-import com.github.kristofa.brave.http.DefaultSpanNameProvider;
 import com.github.kristofa.brave.http.SpanNameProvider;
+import com.github.lmg.brave.http.client.rest_template.support.RestSpanNameProvider;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpRequest;
@@ -43,6 +43,6 @@ public class BraveClientHttpRequestInterceptor implements InitializingBean, Clie
     public void afterPropertiesSet() throws Exception {
         this.clientRequestInterceptor = this.brave.clientRequestInterceptor();
         this.clientResponseInterceptor = this.brave.clientResponseInterceptor();
-        this.spanNameProvider = new DefaultSpanNameProvider();
+        this.spanNameProvider = new RestSpanNameProvider();
     }
 }

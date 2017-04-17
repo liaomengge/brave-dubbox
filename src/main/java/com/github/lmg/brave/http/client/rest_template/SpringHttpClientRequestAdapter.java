@@ -12,4 +12,5 @@ public class SpringHttpClientRequestAdapter extends HttpClientRequestAdapter {
     public SpringHttpClientRequestAdapter(HttpClientRequest request, SpanNameProvider spanNameProvider) {
         super(request, spanNameProvider);
     }
+
 }
