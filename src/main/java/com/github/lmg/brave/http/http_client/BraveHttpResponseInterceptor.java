@@ -1,4 +1,4 @@
-package com.github.lmg.brave.http.client.http_client;
+package com.github.lmg.brave.http.http_client;
 
 import org.apache.http.HttpException;
 import org.apache.http.HttpResponse;

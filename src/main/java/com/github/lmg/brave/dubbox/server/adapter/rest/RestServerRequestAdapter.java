@@ -7,6 +7,7 @@ import com.github.kristofa.brave.SpanId;
 import com.github.kristofa.brave.TraceData;
 import com.github.kristofa.brave.http.BraveHttpHeaders;
 import com.github.lmg.brave.dubbox.server.adapter.AbstractServerRequestAdapter;
+import com.github.lmg.brave.dubbox.utils.TraceLogUtil;
 import lombok.AllArgsConstructor;
 
 import javax.servlet.http.HttpServletRequest;
@@ -33,6 +34,7 @@ public class RestServerRequestAdapter extends AbstractServerRequestAdapter {
             final String spanId = httpServletRequest.getHeader(BraveHttpHeaders.SpanId.getName());
             final String traceId = httpServletRequest.getHeader(BraveHttpHeaders.TraceId.getName());
             if (traceId != null && spanId != null) {
+                TraceLogUtil.put(TraceLogUtil.generateTraceLogIdPrefix() + BraveHttpHeaders.TraceId.getName(), traceId);
                 SpanId span = getSpanId(traceId, spanId, parentId);
                 return TraceData.create(span);
             }

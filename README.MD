@@ -45,6 +45,7 @@
  4、 非dubbox客户端（okhttp3） -> dubbox服务端
 > 开发中 
 
+#### 为了方便服务端trace log记录，降低服务端对brave的依赖，故新增TraceLogUtil类，能进行业务日志追踪
  
 ### 参考文档:
 [http://www.tuicool.com/articles/f2qAZnZ](http://www.tuicool.com/articles/f2qAZnZ)

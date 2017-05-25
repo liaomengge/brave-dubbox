@@ -8,6 +8,7 @@ import com.github.kristofa.brave.SpanId;
 import com.github.kristofa.brave.TraceData;
 import com.github.kristofa.brave.http.BraveHttpHeaders;
 import com.github.lmg.brave.dubbox.server.adapter.AbstractServerRequestAdapter;
+import com.github.lmg.brave.dubbox.utils.TraceLogUtil;
 import lombok.AllArgsConstructor;
 
 import java.util.Collection;
@@ -35,6 +36,7 @@ public class DubboServerRequestAdapter extends AbstractServerRequestAdapter {
             final String spanId = invocation.getAttachment(BraveHttpHeaders.SpanId.getName());
             final String traceId = invocation.getAttachment(BraveHttpHeaders.TraceId.getName());
             if (traceId != null && spanId != null) {
+                TraceLogUtil.put(TraceLogUtil.generateTraceLogIdPrefix() + BraveHttpHeaders.TraceId.getName(), traceId);
                 SpanId span = getSpanId(traceId, spanId, parentId);
                 return TraceData.create(span);
             }

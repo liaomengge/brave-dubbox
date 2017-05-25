@@ -1,10 +1,10 @@
-package com.github.lmg.brave.http.client.http_client;
+package com.github.lmg.brave.http.http_client;
 
 import com.github.kristofa.brave.Brave;
 import com.github.kristofa.brave.ClientRequestInterceptor;
 import com.github.kristofa.brave.ClientResponseInterceptor;
 import com.github.kristofa.brave.http.SpanNameProvider;
-import com.github.lmg.brave.http.client.rest_template.support.RestSpanNameProvider;
+import com.github.lmg.brave.http.support.RestSpanNameProvider;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 

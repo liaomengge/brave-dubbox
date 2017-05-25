@@ -6,10 +6,12 @@ import com.alibaba.dubbo.rpc.*;
 import com.github.kristofa.brave.Brave;
 import com.github.kristofa.brave.ServerRequestInterceptor;
 import com.github.kristofa.brave.ServerResponseInterceptor;
+import com.github.kristofa.brave.http.BraveHttpHeaders;
 import com.github.lmg.brave.dubbox.server.adapter.dubbo.DubboServerRequestAdapter;
 import com.github.lmg.brave.dubbox.server.adapter.dubbo.DubboServerResponseAdapter;
 import com.github.lmg.brave.dubbox.server.adapter.rest.RestServerRequestAdapter;
 import com.github.lmg.brave.dubbox.server.adapter.rest.RestServerResponseAdapter;
+import com.github.lmg.brave.dubbox.utils.TraceLogUtil;
 
 import static com.github.lmg.brave.enums.ProtocolEnum.*;
 
@@ -41,6 +43,8 @@ public class BraveProviderFilter implements Filter {
             } catch (Exception e) {
                 serverResponseInterceptor.handle(new RestServerResponseAdapter(e));
                 throw e;
+            } finally {
+                TraceLogUtil.remove(BraveHttpHeaders.TraceId.getName());
             }
         } else if (protocol.equals(DUBBO.getName()) || protocol.equals(THRIFT.getName()) || protocol.equals(THRIFT2.getName())) {
             serverRequestInterceptor.handle(new DubboServerRequestAdapter(invoker, invocation));
@@ -51,6 +55,8 @@ public class BraveProviderFilter implements Filter {
             } catch (Exception e) {
                 serverResponseInterceptor.handle(new DubboServerResponseAdapter(e));
                 throw e;
+            } finally {
+                TraceLogUtil.remove(BraveHttpHeaders.TraceId.getName());
             }
         } else {
             return invoker.invoke(invocation);

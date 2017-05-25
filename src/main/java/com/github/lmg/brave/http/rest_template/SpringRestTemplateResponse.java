@@ -1,4 +1,4 @@
-package com.github.lmg.brave.http.client.rest_template;
+package com.github.lmg.brave.http.rest_template;
 
 import com.github.kristofa.brave.http.HttpResponse;
 

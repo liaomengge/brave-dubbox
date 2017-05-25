@@ -1,4 +1,4 @@
-package com.github.lmg.brave.http.client.rest_template.support;
+package com.github.lmg.brave.http.support;
 
 import com.github.kristofa.brave.http.HttpRequest;
 import com.github.kristofa.brave.http.SpanNameProvider;

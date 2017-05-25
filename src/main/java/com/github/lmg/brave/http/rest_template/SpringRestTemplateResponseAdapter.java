@@ -1,4 +1,4 @@
-package com.github.lmg.brave.http.client.http_client;
+package com.github.lmg.brave.http.rest_template;
 
 import com.github.kristofa.brave.ClientResponseAdapter;
 import com.github.kristofa.brave.KeyValueAnnotation;
@@ -8,20 +8,20 @@ import java.util.Collection;
 import java.util.Collections;
 
 /**
- * Created by liaomengge on 17/5/25.
+ * Created by liaomengge on 17/4/16.
  */
-public class SpringHttpClientResponseAdapter implements ClientResponseAdapter {
+public class SpringRestTemplateResponseAdapter implements ClientResponseAdapter {
 
     private static final String HTTP_CLIENT_EXCEPTION = "http.client.exception";
 
     private HttpResponse response;
     private Exception exception;
 
-    public SpringHttpClientResponseAdapter(HttpResponse response) {
+    public SpringRestTemplateResponseAdapter(HttpResponse response) {
         this.response = response;
     }
 
-    public SpringHttpClientResponseAdapter(Exception exception) {
+    public SpringRestTemplateResponseAdapter(Exception exception) {
         this.exception = exception;
     }
 

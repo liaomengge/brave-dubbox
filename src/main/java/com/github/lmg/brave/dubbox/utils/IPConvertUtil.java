@@ -3,7 +3,7 @@ package com.github.lmg.brave.dubbox.utils;
 /**
  * Created by liaomengge on 17/4/13.
  */
-public class IPConvertUtil {
+public final class IPConvertUtil {
 
     public static int convertToInt(String ip) {
         String[] ips = ip.split("\\.");
