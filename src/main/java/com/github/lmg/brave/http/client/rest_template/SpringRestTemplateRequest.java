@@ -9,10 +9,11 @@ import java.net.URI;
  * Created by liaomengge on 17/4/16.
  */
 
-public class SpringHttpClientRequest implements HttpClientRequest {
+public class SpringRestTemplateRequest implements HttpClientRequest {
+
     private final HttpRequest request;
 
-    public SpringHttpClientRequest(HttpRequest request) {
+    public SpringRestTemplateRequest(HttpRequest request) {
         this.request = request;
     }
 

@@ -28,13 +28,13 @@ public class BraveClientHttpRequestInterceptor implements InitializingBean, Clie
 
     @Override
     public ClientHttpResponse intercept(HttpRequest httpRequest, byte[] bytes, ClientHttpRequestExecution execution) throws IOException {
-        this.clientRequestInterceptor.handle(new SpringHttpClientRequestAdapter(new SpringHttpClientRequest(httpRequest), this.spanNameProvider));
+        this.clientRequestInterceptor.handle(new SpringRestTemplateRequestAdapter(new SpringRestTemplateRequest(httpRequest), this.spanNameProvider));
         try {
             ClientHttpResponse response = execution.execute(httpRequest, bytes);
-            clientResponseInterceptor.handle(new SpringHttpClientResponseAdapter(new SpringHttpClientResponse(response.getRawStatusCode())));
+            clientResponseInterceptor.handle(new SpringRestTemplateResponseAdapter(new SpringRestTemplateResponse(response.getRawStatusCode())));
             return response;
         } catch (Exception e) {
-            clientResponseInterceptor.handle(new SpringHttpClientResponseAdapter(e));
+            clientResponseInterceptor.handle(new SpringRestTemplateResponseAdapter(e));
             throw e;
         }
     }

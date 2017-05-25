@@ -5,13 +5,13 @@
         <dependency>
             <groupId>io.zipkin.brave</groupId>
             <artifactId>brave-dubbox</artifactId>
-            <version>1.0.1-SNAPSHOT</version>
+            <version>2.0.0-SNAPSHOT</version>
         </dependency>
 ```
 
 ### spring中配置
     
-   * 打印日志方式
+   * 打印日志方式(建议)
 ```xml
         <bean id="brave" class="com.github.lmg.brave.dubbox.factory.BraveFactoryBean">
             <property name="serviceName" value="liaomengge"/>
@@ -40,8 +40,10 @@
 
  3、 非dubbox客户端（httpClient） -> dubbox服务端
 
-> 开发ing
+> 在客户端，通过HttpCient走http调用服务
 
+ 4、 非dubbox客户端（okhttp3） -> dubbox服务端
+> 开发中 
 
  
 ### 参考文档:

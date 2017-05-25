@@ -1,4 +1,4 @@
-package com.github.lmg.brave.http.client.rest_template;
+package com.github.lmg.brave.http.client.http_client;
 
 import com.github.kristofa.brave.ClientResponseAdapter;
 import com.github.kristofa.brave.KeyValueAnnotation;
@@ -8,7 +8,7 @@ import java.util.Collection;
 import java.util.Collections;
 
 /**
- * Created by liaomengge on 17/4/16.
+ * Created by liaomengge on 17/5/25.
  */
 public class SpringHttpClientResponseAdapter implements ClientResponseAdapter {
 

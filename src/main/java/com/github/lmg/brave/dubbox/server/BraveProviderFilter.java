@@ -33,7 +33,7 @@ public class BraveProviderFilter implements Filter {
     public Result invoke(Invoker<?> invoker, Invocation invocation) throws RpcException {
         String protocol = invoker.getUrl().getProtocol();
         if (protocol.equals(REST.getName())) {
-            serverRequestInterceptor.handle(new RestServerRequestAdapter(invoker, invocation));
+            serverRequestInterceptor.handle(new RestServerRequestAdapter(invocation));
             try {
                 Result rpcResult = invoker.invoke(invocation);
                 serverResponseInterceptor.handle(new RestServerResponseAdapter(rpcResult));

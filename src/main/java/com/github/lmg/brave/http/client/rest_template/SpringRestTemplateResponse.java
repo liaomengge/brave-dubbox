@@ -5,11 +5,11 @@ import com.github.kristofa.brave.http.HttpResponse;
 /**
  * Created by liaomengge on 17/4/16.
  */
-public class SpringHttpClientResponse implements HttpResponse {
+public class SpringRestTemplateResponse implements HttpResponse {
 
     private final int status;
 
-    public SpringHttpClientResponse(int status) {
+    public SpringRestTemplateResponse(int status) {
         this.status = status;
     }
 

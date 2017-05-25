@@ -1,7 +1,6 @@
 package com.github.lmg.brave.dubbox.server.adapter.rest;
 
 import com.alibaba.dubbo.rpc.Invocation;
-import com.alibaba.dubbo.rpc.Invoker;
 import com.alibaba.dubbo.rpc.RpcContext;
 import com.github.kristofa.brave.KeyValueAnnotation;
 import com.github.kristofa.brave.SpanId;
@@ -20,7 +19,6 @@ import java.util.Collections;
 @AllArgsConstructor
 public class RestServerRequestAdapter extends AbstractServerRequestAdapter {
 
-    private Invoker<?> invoker;
     private Invocation invocation;
 
     @Override
