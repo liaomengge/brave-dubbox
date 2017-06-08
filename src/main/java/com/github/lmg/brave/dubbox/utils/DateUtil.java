@@ -13,7 +13,7 @@ import java.util.Date;
 public final class DateUtil {
 
     public final static String yyyy_MM_dd_HH_mm_ss = "yyyy-MM-dd HH:mm:ss";
-    public final static String yyyyMMdd = "yyyyMMdd";
+    public final static String yyyyMMdd_HHmmss_SSS = "yyyyMMdd_HHmmss_SSS";
 
     private DateUtil() {
     }
@@ -104,5 +104,4 @@ public final class DateUtil {
         calendar.set(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH), 23, 59, 59);
         return calendar.getTime();
     }
-
 }

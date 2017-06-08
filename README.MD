@@ -1,6 +1,6 @@
-使用步骤：
+### **使用步骤**
 
-### maven添加该项目jar包（自己打包安装到本地仓库）
+### 1、maven添加该项目jar包（自己打包安装到本地仓库）
 ```xml
         <dependency>
             <groupId>io.zipkin.brave</groupId>
@@ -9,7 +9,7 @@
         </dependency>
 ```
 
-### spring中配置
+### 2、spring中配置
     
    * 打印日志方式(建议)
 ```xml
@@ -28,7 +28,7 @@
         </bean>
 ```
 
-### 支持模式
+### **支持模式**
 
  1、 dubbox客户端 -> dubbox服务端
 
@@ -40,12 +40,14 @@
 
  3、 非dubbox客户端（httpClient） -> dubbox服务端
 
-> 在客户端，通过HttpCient走http调用服务
+> 在客户端，通过HttpCient走http（同步）调用服务
 
  4、 非dubbox客户端（okhttp3） -> dubbox服务端
-> 开发中 
+> 在客户端，通过OkHttp3走http调用服务
 
 #### 为了方便服务端trace log记录，降低服务端对brave的依赖，故新增TraceLogUtil类，能进行业务日志追踪
+
+###*最近发现[openzipkin](https://github.com/openzipkin/brave)已经换做另一种处理方案了，之后会更新为最新的处理方案~~*
  
 ### 参考文档:
 [http://www.tuicool.com/articles/f2qAZnZ](http://www.tuicool.com/articles/f2qAZnZ)

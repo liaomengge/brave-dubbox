@@ -62,7 +62,7 @@ public final class TraceLogUtil {
     }
 
     public static String generateTraceLogIdPrefix() {
-        return DateUtil.getNowDate2String(DateUtil.yyyyMMdd) + "_";
+        return DateUtil.getNowDate2String(DateUtil.yyyyMMdd_HHmmss_SSS) + "_";
     }
 
 }

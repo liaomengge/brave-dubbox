@@ -1,4 +1,4 @@
-package com.github.lmg.brave.http.http_client;
+package com.github.lmg.brave.http.internal;
 
 import com.github.kristofa.brave.Brave;
 import com.github.kristofa.brave.ClientRequestInterceptor;
@@ -11,7 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 /**
  * Created by liaomengge on 17/5/25.
  */
-public class BraveHttpInterceptor implements InitializingBean {
+public abstract class BraveHttpInterceptor implements InitializingBean {
 
     protected ClientRequestInterceptor clientRequestInterceptor;
     protected ClientResponseInterceptor clientResponseInterceptor;
