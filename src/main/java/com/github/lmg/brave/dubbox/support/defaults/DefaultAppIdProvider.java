@@ -11,7 +11,7 @@ import java.lang.reflect.InvocationTargetException;
 /**
  * Created by liaomengge on 17/6/12.
  */
-public class DefaultDubboAppIdProvider implements DubboAppIdProvider {
+public class DefaultAppIdProvider implements DubboAppIdProvider {
 
     private final String DEFAULT_APP_ID = "000";
 

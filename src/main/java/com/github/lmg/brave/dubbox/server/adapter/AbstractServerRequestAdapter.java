@@ -4,7 +4,7 @@ import com.github.kristofa.brave.ServerRequestAdapter;
 import com.github.kristofa.brave.SpanId;
 import com.github.lmg.brave.dubbox.support.DubboAppIdProvider;
 import com.github.lmg.brave.dubbox.support.DubboSpanNameProvider;
-import com.github.lmg.brave.dubbox.support.defaults.DefaultDubboAppIdProvider;
+import com.github.lmg.brave.dubbox.support.defaults.DefaultAppIdProvider;
 import com.github.lmg.brave.dubbox.support.defaults.DefaultSpanNameProvider;
 
 import static com.github.kristofa.brave.IdConversion.convertToLong;
@@ -15,7 +15,7 @@ import static com.github.kristofa.brave.IdConversion.convertToLong;
 public abstract class AbstractServerRequestAdapter implements ServerRequestAdapter {
 
     protected static final DubboSpanNameProvider spanNameProvider = new DefaultSpanNameProvider();
-    protected static final DubboAppIdProvider appIdProvider = new DefaultDubboAppIdProvider();
+    protected static final DubboAppIdProvider appIdProvider = new DefaultAppIdProvider();
 
     protected SpanId getSpanId(String traceId, String spanId, String parentSpanId) {
         return SpanId.builder()

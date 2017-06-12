@@ -45,7 +45,8 @@
  4、 非dubbox客户端（okhttp3） -> dubbox服务端
 > 在客户端，通过OkHttp3走http调用服务
 
-#### 为了方便服务端trace log记录，降低服务端对brave的依赖，故新增TraceLogUtil类，能进行业务日志追踪
+### **3、服务端日志调用**
+#### 为了方便服务端trace log记录，降低服务端对brave的依赖，故新增TraceLogUtil类，能进行业务日志追踪，其中引入AppId方便快速查询是哪个调用方（可以自己扩展）
 
 ###*最近发现[openzipkin](https://github.com/openzipkin/brave)已经换做另一种处理方案了，之后会更新为最新的处理方案~~*
  
