@@ -36,7 +36,7 @@ public class DubboServerRequestAdapter extends AbstractServerRequestAdapter {
             final String spanId = invocation.getAttachment(BraveHttpHeaders.SpanId.getName());
             final String traceId = invocation.getAttachment(BraveHttpHeaders.TraceId.getName());
             if (traceId != null && spanId != null) {
-                TraceLogUtil.put(BraveHttpHeaders.TraceId.getName(), TraceLogUtil.generateTraceLogIdPrefix() + traceId);
+                TraceLogUtil.put(BraveHttpHeaders.TraceId.getName(), appIdProvider.resolveAppId(invocation) + "_" + TraceLogUtil.generateTraceLogIdPrefix() + traceId);
                 SpanId span = getSpanId(traceId, spanId, parentId);
                 return TraceData.create(span);
             }
